@@ -4,6 +4,8 @@ session_start();
 $message = '';
 $error = '';
 
+if (!$_COOKIE['auth']) header('Location: /');
+
 if (isset($_POST['save'])) {
     if (empty($_POST['kniga'])) {
         $error = "<label class = 'text-danger'>Введите имя книги</lable>";
@@ -27,7 +29,10 @@ if (isset($_POST['save'])) {
             $error = 'Файл не найден';
         }
     }
-
+}
+elseif (isset($_POST['exit'])) {
+    setcookie('auth', false);
+    header('Location: /');
 }
 ?>
 
@@ -63,16 +68,17 @@ if (isset($_POST['save'])) {
             ?>
         </form>
     </div>
-    <div class="library">
+    <ul class="library">
         <?php
         $library = file_get_contents('books.json');
         $start_library = json_decode($library, true);
         echo "<pre>";
         print_r($start_library);
-        echo "<pre>";
-        print_r($start_library['1']['books']);
+        foreach ($start_library as $book) {
+            echo '<li>Название книги: ' . $book['name'] .' Год: ' . $book['year'] . '</li>';
+        }
         ?>
-    </div>
+    </ul>
 <form method="post">
     <input type="submit" value="Выйти" name="exit">
 </form>
@@ -80,11 +86,3 @@ if (isset($_POST['save'])) {
 <script src="modal.js"></script>
 </body>
 </html>
-
-<?php
-
-if (isset($_POST['exit'])) {
-    header('Location: index.php');
-}
-
-?>
