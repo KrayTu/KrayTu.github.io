@@ -1,6 +1,4 @@
 <?php
-session_start();
-
 $message = '';
 $error = '';
 
@@ -61,6 +59,7 @@ elseif (isset($_POST['exit'])) {
             <input type="text" name="year" placeholder="Введите год">
             <button type="submit" name="save">Сохранить</button>
             <button type="submit" class="close">Закрыть</button>
+            <input type="submit" class="exit" value="Выйти" name="exit">
             <?php
             if (isset($message)) {
                 echo $message;
@@ -68,21 +67,17 @@ elseif (isset($_POST['exit'])) {
             ?>
         </form>
     </div>
-    <ul class="library">
-        <?php
-        $library = file_get_contents('books.json');
-        $start_library = json_decode($library, true);
-        echo "<pre>";
-        print_r($start_library);
-        foreach ($start_library as $book) {
-            echo '<li>Название книги: ' . $book['name'] .' Год: ' . $book['year'] . '</li>';
-        }
-        ?>
-    </ul>
-<form method="post">
-    <input type="submit" value="Выйти" name="exit">
-</form>
-
+    <div class="book">
+        <ul class="library">
+            <?php
+            $library = file_get_contents('books.json');
+            $start_library = json_decode($library, true);
+            foreach ($start_library as $book) {
+                echo '<li>Название книги: ' . $book['name'] .' Год: ' . $book['year'] . '</li>';
+            }
+            ?>
+        </ul>
+    </div>
 <script src="modal.js"></script>
 </body>
 </html>

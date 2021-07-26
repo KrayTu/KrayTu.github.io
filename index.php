@@ -1,7 +1,3 @@
-<?php
-session_start();
-?>
-
 <!doctype html>
 <html lang="en">
 <head>
@@ -19,13 +15,5 @@ session_start();
     <label>Пароль</label>
     <input type="password" name="password" placeholder="Ваш пароль">
     <input type="submit" name="submit" value="Войти">
-    <?php
-    if (isset($_SESSION['message'])) {
-        echo '<p class="msg"> '  . $_SESSION['message'] . ' </p>';
-    }
-    unset($_SESSION['message']);
-    ?>
-</form>
-
 </body>
 </html>

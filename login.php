@@ -1,7 +1,4 @@
 <?php
-session_start();
-
-
 $login = $_POST['login'];
 $password = md5($_POST['password']);
 
