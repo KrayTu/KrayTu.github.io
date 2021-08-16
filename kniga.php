@@ -1,37 +1,19 @@
 <?php
-$message = '';
-$error = '';
+require_once('addbook.php');
+require_once('search.php');
 
-if (!$_COOKIE['auth']) header('Location: /');
+$page = $_GET['page'];
+/*$count = 3;
 
-if (isset($_POST['save'])) {
-    if (empty($_POST['kniga'])) {
-        $error = "<label class = 'text-danger'>Введите имя книги</lable>";
-    }else if (empty($_POST['year'])) {
-        $error = "<label class = 'text-danger'>Введите год книги</lable>";
-    }else {
-        if(file_exists('books.json')) {
-            $current_data = file_get_contents('books.json');
-            $array_data = json_decode($current_data, true);
-            $extraI = array (
-                'name' => $_POST['kniga'],
-                'year' => $_POST['year']
-            );
-            $array_data[] = $extraI;
-            $final_data = json_encode($array_data);
-            if (file_put_contents('books.json', $final_data)) {
-                $message = "<lable class = 'text-success'>Файл добавлен</label>";
-                echo header("location: http://{$_SERVER['SERVER_NAME']}/kniga.php");
-            }
-        }else {
-            $error = 'Файл не найден';
-        }
-    }
+$library = file_get_contents('books.json');
+$start_library = json_decode($library, true);
+foreach ($start_library as $book) {
+    $arBook[] = $book;
 }
-elseif (isset($_POST['exit'])) {
-    setcookie('auth', false);
-    header('Location: /');
-}
+$page_count = floor(count($start_library) / $count);
+
+for ($i = $page*$count; $i < ($page + 1)*$count; $i++) {}*/
+
 ?>
 
 
@@ -65,19 +47,35 @@ elseif (isset($_POST['exit'])) {
                 echo $message;
             }
             ?>
+            <div class="form-search">
+                <input class="" type="search" name="search" placeholder="Введите что ищите"><input type="submit" class="search" name="submitSearch" value="Поиск">
+                <div class="endSearch"><?php echo "Книга найдена: ".$finalBook['name']." Год: ".$finalBook['year'] ?></div>
+            </div>
         </form>
+    </div>
+    <div class="numberPage">
+        <h1>Страница <?php echo $page + 1;?></h1>
     </div>
     <div class="book">
         <ul class="library">
             <?php
+            $page = $_GET['page'];
+            $count = 3;
             $library = file_get_contents('books.json');
             $start_library = json_decode($library, true);
-            foreach ($start_library as $book) {
-                echo '<li>Название книги: ' . $book['name'] .' Год: ' . $book['year'] . '</li>';
+            $page_count = ceil(count($start_library) / $count);
+            for ($i = $page*$count; $i < ($page + 1)*$count; $i++) {
+                if ($start_library[$i] != NULL) {
+                    echo '<li>Название книги: ' . $start_library[$i]['name'] . ' Год: ' . $start_library[$i]['year'] . '</li>';
+                }
             }
             ?>
         </ul>
     </div>
-<script src="modal.js"></script>
+    <div class="page_list">
+        <?php for ($p = 0; $p <= $page_count; $p++)  :?>
+            <a href="?page=<?php echo $p;?>"><button class="page_button"><?php echo $p + 1; ?></button></a>
+        <?php endfor; ?>
+    </div>
 </body>
 </html>
